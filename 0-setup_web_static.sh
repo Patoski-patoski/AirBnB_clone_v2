@@ -34,6 +34,20 @@ fi
 # Create the new symbolic link for the website
 sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 
+sudo tee /etc/nginx/sites-available/hbnb.conf << EOF > /dev/null
+server {
+        listen 80;
+        listen [::]:80;
+        server_name www.patoski.tech patoski.tech;
+        add_header X-Served-By $HOSTNAME;
+        location /hbnb_static/ {
+                alias /data/web_static/current/;
+                autoindex off;
+        }
+        index index.html;
+}
+EOF
+
 # Create a symbolic link to make te site like
 if [ -L /etc/nginx/sites-enabled/hbnb.conf ]; then
    sudo  rm /etc/nginx/sites-enabled/hbnb.conf
