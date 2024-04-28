@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# a Bash script that sets up your web servers for the deployment of web_static
+# A Bash script that sets up your web servers for the deployment of web_static
 
 if [ -L /etc/nginx ]; then
     # Install Nginx if not installed
@@ -34,6 +34,7 @@ fi
 # Create the new symbolic link for the website
 sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 
+# Create the nginx configuration
 sudo tee /etc/nginx/sites-available/hbnb.conf << EOF > /dev/null
 server {
         listen 80;
@@ -55,7 +56,7 @@ fi
 sudo ln -s /etc/nginx/sites-available/hbnb.conf /etc/nginx/sites-enabled/
 
 # Give ownership of the /data/ folder to the ubuntu user AND group
-sudo chown -R ubuntu: /data/
+sudo chown -R ubuntu:ubuntu /data/
 
 # Test the web server
 sudo service nginx restart
