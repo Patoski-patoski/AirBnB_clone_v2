@@ -1,62 +1,40 @@
 #!/usr/bin/env bash
-# A Bash script that sets up your web servers for the deployment of web_static
+# Script that sets up your web servers for the deployment of web_static
 
-if [ -L /etc/nginx ]; then
-    # Install Nginx if not installed
-    sudo apt-get update
-    sudo apt-get install -y nginx
-    sudo service nginx start
+# Install Nginx if it not already installed
+if ! nginx -v; then
+    sudo apt -y update
+    sudo apt install -y nginx
 fi
 
-# Restart Nginx
-sudo service nginx restart
+# Create the folder /data/web_static/releases/ if it doesn’t already exist
+sudo mkdir -p "/data/web_static/releases/test"
 
-# Create necessary directories
-sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared/
+# Create the folder /data/web_static/shared/ if it doesn’t already exist
+sudo mkdir -p "/data/web_static/shared/"
 
-# Create the index.html file
-sudo tee /data/web_static/releases/test/index.html << EOF > /dev/null
-<html>
+# Create a fake HTML file /data/web_static/releases/test/index.html
+echo "<html>
   <head>
   </head>
   <body>
-    Holberton School
+    <h1>Adam is almost a Full Stack Software Engineer</h1>
   </body>
-</html>
-EOF
+</html>" | sudo tee "/data/web_static/releases/test/index.html" > /dev/null
 
-# Create and remove the existing symbolic link if it exists
-if [ -L /data/web_static/current ]; then
-    rm /data/web_static/current
-fi
-
-# Create the new symbolic link for the website
-sudo ln -s /data/web_static/releases/test/ /data/web_static/current
-
-# Create the nginx configuration
-sudo tee /etc/nginx/sites-available/hbnb.conf << EOF > /dev/null
-server {
-        listen 80;
-        listen [::]:80;
-        server_name www.patoski.tech patoski.tech;
-        add_header X-Served-By $HOSTNAME;
-        location /hbnb_static/ {
-                alias /data/web_static/current/;
-                autoindex off;
-        }
-        index index.html;
-}
-EOF
-
-# Create a symbolic link to make te site like
-if [ -L /etc/nginx/sites-enabled/hbnb.conf ]; then
-   sudo  rm /etc/nginx/sites-enabled/hbnb.conf
-fi
-sudo ln -s /etc/nginx/sites-available/hbnb.conf /etc/nginx/sites-enabled/
+# a symbolic link /data/web_static/current linked to the /data/web_static/releases/test/ folder
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Give ownership of the /data/ folder to the ubuntu user AND group
 sudo chown -R ubuntu:ubuntu /data/
 
-# Test the web server
+# Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static
+if [ -e "/etc/nginx/sites-available/default_backup" ]; then
+        sudo cp /etc/nginx/sites-available/default_backup /etc/nginx/sites-available/default
+else
+        sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default_backup
+fi
+sed -i "0,/location \/ {/s||location \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}\n\n\t&|" /etc/nginx/sites-available/default
+
+# Restart nginx
 sudo service nginx restart
