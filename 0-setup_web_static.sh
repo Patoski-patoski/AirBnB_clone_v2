@@ -5,11 +5,11 @@ if [ -L /etc/nginx ]; then
     # Install Nginx if not installed
     sudo apt-get update
     sudo apt-get install -y nginx
-    sudo systemctl reload nginx.service
+    sudo service nginx start
 fi
 
 # Restart Nginx
-sudo systemctl restart nginx.service
+sudo service nginx restart
 
 # Create necessary directories
 sudo mkdir -p /data/web_static/releases/test/
@@ -44,5 +44,4 @@ sudo ln -s /etc/nginx/sites-available/hbnb.conf /etc/nginx/sites-enabled/
 sudo chown -R ubuntu: /data/
 
 # Test the web server
-sudo systemctl reload nginx.service
 sudo service nginx restart
