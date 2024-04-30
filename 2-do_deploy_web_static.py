@@ -36,20 +36,31 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    """distributes an archive to your web servers"""
+    """ do_deploy: distributes an archive to your web servers
+        Args:
+            archive_path(str): param 1
+
+        Return True if args, False otherwise
+    """
     if exists(archive_path) is False:
         return False
     try:
         put(archive_path, "/tmp/")
-        file_name = archive_path.split("/")[-1]
-        path = "/data/web_static/releases/{}".format(file_name.split('.')[0])
-        run("mkdir -p {}".format(path))
-        run("tar -xzf /tmp/{} -C {}/".format(file_name, path))
-        run("rm /tmp/{}".format(file_name))
-        run("mv {}/web_static/* {}/".format(path, path))
-        run("rm -rf {}/web_static".format(path))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {}/ /data/web_static/current".format(path))
+
+        first_split = archive_path.split('/')[-1]
+        second_split = first_split.split('.')[0]
+
+        path = f"/data/web_static/releases/{second_split}"
+        run(f"mkdir -p {path}/")
+        run(f"tar -xzf /tmp/{first_split} -C {path}")
+        # Delete the archive from the web server
+        run(f"rm -fr /tmp/versions/{first_split}")
+        run(f"rm -rf {path}/web_static")
+        run(f"rm -rf {path}/web_static")
+        # Delete the symbolic link /data/web_static/current from the web server
+        run(f"rm -rf /data/web_static/current")
+        run(f"ln -s {path}/ /data/web_static/current")
+
         print("New version deployed!")
         return True
     except Exception:
