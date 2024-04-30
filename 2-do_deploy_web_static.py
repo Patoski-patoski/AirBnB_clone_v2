@@ -3,8 +3,9 @@
      the contents of the web_static folder of your AirBnB Clone repo
 """
 
-from fabric.api import local
+from fabric.api import local, env, put, run
 from datetime import datetime
+from os.path import exists
 
 env.hosts = ["35.175.128.192", "54.88.205.156"]
 
