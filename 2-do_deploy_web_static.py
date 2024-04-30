@@ -56,9 +56,10 @@ def do_deploy(archive_path):
         # Delete the archive from the web server
         run(f"rm -fr /tmp/versions/{first_split}")
         run(f"rm -rf {path}/web_static")
-        run(f"rm -rf {path}/web_static")
         # Delete the symbolic link /data/web_static/current from the web server
+        local(f"rm -rf /data/web_static/current")
         run(f"rm -rf /data/web_static/current")
+        local(f"ln -s {path}/ /data/web_static/current")
         run(f"ln -s {path}/ /data/web_static/current")
 
         print("New version deployed!")
