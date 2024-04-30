@@ -75,12 +75,8 @@ def deploy():
     """ deploy: a fabric script that creates and distributes an archive to your
         web servers
     """
-    #run("Executing task \'deploy\'")
+    # run("Executing task \'deploy\'")
     archived = do_pack()
     my_deploy = do_deploy(archived)
 
     return my_deploy
-
-
-
-
