@@ -52,14 +52,17 @@ def do_deploy(archive_path):
 
         path = f"/data/web_static/releases/{second_split}"
         run(f"mkdir -p {path}/")
+        local(f"mkdir -p {path}/")
         run(f"tar -xzf /tmp/{first_split} -C {path}")
         # Delete the archive from the web server
         run(f"rm -fr /tmp/{first_split}")
         run(f"rm -rf {path}/web_static")
+        local(f"rm -rf {path}/web_static")
         # Delete the symbolic link /data/web_static/current from the web server
         run(f"rm -rf /data/web_static/current")
+        local(f"rm -rf /data/web_static/current")
         run(f"ln -sf {path}/ /data/web_static/current")
-        local(f"ln -sf {path}/ /data/web_static/current")
+        local(f"ln -sf /AirBnB_clone_v2/web_static /data/web_static/current")
 
         print("New version deployed!")
         return True
