@@ -27,6 +27,7 @@ file { ['/data/web_static/releases/test/', '/data/web_static/shared/']:
   ensure => directory,
   owner  => 'ubuntu',
   group  => 'ubuntu',
+  mode   => '0755',
 }
 
 # Create the index.html file
@@ -41,6 +42,7 @@ file { '/data/web_static/releases/test/index.html':
 </html>',
   owner   => 'ubuntu',
   group   => 'ubuntu',
+  mode    => '0644',
 }
 
 # Create and remove the existing symbolic link if it exists
@@ -76,5 +78,6 @@ file { '/data/':
   ensure => directory,
   owner  => 'ubuntu',
   group  => 'ubuntu',
+  mode   => '0755',
   recurse => true,
 }
