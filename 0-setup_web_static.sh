@@ -18,7 +18,7 @@ echo "<html>
   <head>
   </head>
   <body>
-    <h1>Adam is almost a Full Stack Software Engineer</h1>
+    Holberton School
   </body>
 </html>" | sudo tee "/data/web_static/releases/test/index.html" > /dev/null
 
