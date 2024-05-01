@@ -41,7 +41,7 @@ $html_content = @(END)
     <head>
     </head>
     <body>
-        <h1>Adam is almost a Full Stack Software Engineer</h1>
+        <h1>Holberton School</h1>
     </body>
 </html>
 | END
