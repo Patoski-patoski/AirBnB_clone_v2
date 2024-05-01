@@ -10,6 +10,18 @@ service { 'nginx':
   restart => true,
 }
 
+group { 'ubuntu':
+  ensure => present,
+}
+
+user { 'ubuntu':
+  ensure     => present,
+  gid        => 'ubuntu',
+  home       => '/home/ubuntu',
+  shell      => '/bin/bash',
+  managehome => true,
+}
+
 # Create necessary directories
 file { ['/data/web_static/releases/test/', '/data/web_static/shared/']:
   ensure => directory,
