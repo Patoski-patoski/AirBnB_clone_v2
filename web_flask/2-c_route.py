@@ -20,10 +20,26 @@ def hbnb():
     return "HBNB"
 
 
+def replace(strings):
+    """ replace: replace strings containing underscore(_) with space (" ")
+    Args:
+         (str): Strings to be replaced
+    Return:
+         New and replaced string!
+    """
+    new_str = ""
+    for s in strings:
+        if s == '_':
+            s = ' '
+        new_str += (s)
+    return new_str
+
+
 @app.route('/c/<text>')
 def c_is_fun(text):
-    """ c_is_fun: display "C" followed by the value of the text variable"""
-    return "C {}".format(escape(text))
+    """ c_is_fun: display "C" followed by the value of the text variable """
+    replaced_text = escape(text)
+    return "C {}".format(replace(replaced_text))
 
 
 if __name__ == "__main__":
