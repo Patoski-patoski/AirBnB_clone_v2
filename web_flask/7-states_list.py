@@ -12,8 +12,7 @@ app = Flask(__name__)
 @app.teardown_appcontext
 def teardown(exception):
     """ teardown: to remove current sqlalchemy Session """
-    if storage.__session is not None:
-        storage.close()
+    storage.close()
 
 
 
