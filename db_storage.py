@@ -39,35 +39,35 @@ class DBStorage:
             from models.base_model import Base
             Base.metadata.drop_all(self.__engine)
 
-    def all(self, cls=None):
-        """
-        Queries the current database session for all objects of the given class
+    def all_objects(self, cls=None):
+        """Queries the current database session for all objects of the given
+           class
 
         Args:
-            cls (BaseModel, optional): The class to query. Defaults to None.
+           cls (BaseModel, optional): The class to query. Defaults to None.
 
         Returns:
-            list: A list of all objects of the given class.
-        """
+               dict: A dictionary containing all objects of the given class,
+               with keys as object identifiers.
+    """
 
-        cls_list = [User, State, City, Amenity, Place, Review]
-        if cls is None:
-            obj_id = {}
-            for cls in cls_list:
-                try:
-                    cls_table = self.__session.query(cls)
-                except BaseException:
-                    continue
-                for row in cls_table:
-                    key = "{}.{}".format(row.__class__.__name__, row.id)
-                    obj_id[key] = row
-        else:
-            cls_table = self.__session.query(cls)
-            obj_id = {}
+    cls_list = [User, State, City, Amenity, Place, Review]
+    obj_id = {}
+    if cls is None:
+        for cls in cls_list:
+            try:
+                cls_table = self.__session.query(cls)
+            except BaseException:
+                continue
             for row in cls_table:
-                key = "{}.{}".format(row.__class__.__name__, row.id)
+                key = f"{row.__class__.__name__}.{row.id}"
                 obj_id[key] = row
-        return obj_id
+    else:
+        cls_table = self.__session.query(cls)
+        for row in cls_table:
+            key = f"{row.__class__.__name__}.{row.id}"
+            obj_id[key] = row
+    return obj_id
 
     def new(self, obj):
         """Adds the object to the current database session.
