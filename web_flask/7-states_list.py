@@ -19,9 +19,7 @@ def teardown(exception):
 def states_list():
     """A method to render an HTML page with a list of all State objects
     """
-    # test start
     storage.reload()
-    # ends
     states = storage.all(State).values()
     states = sorted(states, key=lambda state: state.name)
     return render_template("7-states_list.html", states=states)
