@@ -15,7 +15,6 @@ def teardown(exception):
     storage.close()
 
 
-
 @app.route("/states_list", strict_slashes=False)
 def states_list():
     """A method to render an HTML page with a list of all State objects
